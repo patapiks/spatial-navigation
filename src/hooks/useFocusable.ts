@@ -3,7 +3,7 @@ import Navigation from '../Navigation';
 
 export const useFocusable = (id: string) => {
   const [focused, setFocused] = useState(false);
-  const ref = useRef<any>(null);
+  const ref = useRef(null);
 
   useEffect(() => {
     if (ref.current) {
