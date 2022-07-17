@@ -1,16 +1,19 @@
+interface IInit {
+  initialId: string;
+}
 interface INextFocusedCandidate {
   distance?: number;
-  key?: string;
+  id?: string;
 }
 
 interface IAddElement {
-  key: string;
+  id: string;
   node: Element;
   setFocused: (value: boolean) => void;
 }
 
 interface IFocusableEl {
-  key: string;
+  id: string;
   node: Element;
   setFocused: (value: boolean) => void;
   x: number;
@@ -18,8 +21,8 @@ interface IFocusableEl {
 }
 
 class Navigation {
-  private isStarted: boolean;
-  private focusableElements: { [key: string]: IFocusableEl };
+  private isInitialized: boolean;
+  private focusableElements: { [id: string]: IFocusableEl };
   private focusedElement: IFocusableEl | null;
 
   private calculateDistance(
@@ -30,56 +33,60 @@ class Navigation {
   }
 
   private keydownListener = (event: KeyboardEvent) => {
-    if (this.focusedElement) {
-      const candidates = Object.entries(this.focusableElements);
+    const candidates = Object.entries(this.focusableElements);
+    const currentEl = this.focusedElement;
+
+    if (currentEl && candidates.length) {
       let nextFocusedCandidate = null;
 
       switch (event.key) {
         case 'ArrowLeft':
-          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [key, coord]) => {
-            if (this.focusedElement && coord.x >= this.focusedElement.x) return acc;
+          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [id, coord]) => {
+            if (coord.x >= currentEl.x) return acc;
 
-            const distance = this.calculateDistance(this.focusedElement!, coord); //TODO
+            const distance = this.calculateDistance(currentEl, coord);
 
             if (acc.distance && acc.distance < distance) return acc;
-            return { distance, key };
+            return { distance, id };
           }, {});
           break;
         case 'ArrowRight':
-          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [key, coord]) => {
-            if (this.focusedElement && coord.x <= this.focusedElement.x) return acc;
+          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [id, coord]) => {
+            if (coord.x <= currentEl.x) return acc;
 
-            const distance = this.calculateDistance(this.focusedElement!, coord); //TODO
+            const distance = this.calculateDistance(currentEl, coord);
 
             if (acc.distance && acc.distance < distance) return acc;
-            return { distance, key };
+            return { distance, id };
           }, {});
           break;
         case 'ArrowUp':
-          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [key, coord]) => {
-            if (this.focusedElement && coord.y >= this.focusedElement.y) return acc;
+          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [id, coord]) => {
+            if (coord.y >= currentEl.y) return acc;
 
-            const distance = this.calculateDistance(this.focusedElement!, coord); //TODO
+            const distance = this.calculateDistance(currentEl, coord);
 
             if (acc.distance && acc.distance < distance) return acc;
-            return { distance, key };
+            return { distance, id };
           }, {});
           break;
         case 'ArrowDown':
-          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [key, coord]) => {
-            if (this.focusedElement && coord.y <= this.focusedElement.y) return acc;
+          nextFocusedCandidate = candidates.reduce<INextFocusedCandidate>((acc, [id, coord]) => {
+            if (coord.y <= currentEl.y) return acc;
 
-            const distance = this.calculateDistance(this.focusedElement!, coord); //TODO
+            const distance = this.calculateDistance(currentEl, coord);
 
             if (acc.distance && acc.distance < distance) return acc;
-            return { distance, key };
+            return { distance, id };
           }, {});
           break;
+        case 'Enter':
+          console.log(`Element with ID: ${currentEl.id} was clicked!`);
       }
 
-      if (nextFocusedCandidate?.key) {
-        this.focusedElement?.setFocused(false);
-        this.focusedElement = this.focusableElements[nextFocusedCandidate.key];
+      if (nextFocusedCandidate?.id) {
+        currentEl.setFocused(false);
+        this.focusedElement = this.focusableElements[nextFocusedCandidate.id];
         this.focusedElement.setFocused(true);
       }
     }
@@ -88,32 +95,32 @@ class Navigation {
   constructor() {
     this.focusableElements = {};
     this.focusedElement = null;
-    this.isStarted = false;
+    this.isInitialized = false;
   }
 
-  start(key: string) {
-    if (!this.isStarted) {
-      this.isStarted = true;
-      this.focusedElement = this.focusableElements[key];
-      this.focusedElement.setFocused(true);
+  init({ initialId }: IInit) {
+    if (!this.isInitialized) {
+      this.isInitialized = true;
+      this.focusedElement = this.focusableElements[initialId];
+      this.focusedElement?.setFocused(true);
 
       document.addEventListener('keydown', this.keydownListener);
     }
   }
 
-  stop() {
-    this.isStarted = false;
+  destroy() {
+    this.isInitialized = false;
     this.focusedElement?.setFocused(false);
     this.focusedElement = null;
 
     document.removeEventListener('keydown', this.keydownListener);
   }
 
-  addElement({ key, node, setFocused }: IAddElement) {
+  addElement({ id, node, setFocused }: IAddElement) {
     const { x, y } = node.getBoundingClientRect();
 
-    this.focusableElements[key] = {
-      key,
+    this.focusableElements[id] = {
+      id,
       x,
       y,
       node,
@@ -121,8 +128,8 @@ class Navigation {
     };
   }
 
-  removeElement(key: string) {
-    delete this.focusableElements[key];
+  removeElement(id: string) {
+    delete this.focusableElements[id];
   }
 }
 

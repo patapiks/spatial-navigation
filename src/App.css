@@ -4,30 +4,35 @@
 
 .list {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   width: 700px;
-  height: fit-content;
-  justify-content: center;
-  align-items: center;
 }
 
 .list__item {
-  box-sizing: border-box;
-  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 20px;
   list-style: none;
   width: 100px;
   height: 100px;
   background-color: cadetblue;
   margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.list__item_focused {
-  border: 6px solid tomato;
 }
 
 .main {
   display: flex;
+}
+
+.focusable-element {
+  transition: transform 0.3s;
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+.focusable-element_focused {
+  border: 6px solid tomato;
+  transform: scale(1.1);
 }
