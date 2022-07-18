@@ -12,9 +12,8 @@
 ![example](./Peek%202022-07-18%2020-20.gif)
 ### Get started
 
-`npm install`
-`npm start`
+`npm install` > `npm start`
 
-### Тестирование
+### Testing
 
  `npx cypress open`
