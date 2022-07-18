@@ -16,22 +16,25 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="header">
-        <ul className="list">
-          {mockedArray.map((item) => (
-            <ListItem key={item} id={item} />
+    <div className="app">
+      <nav>
+        <ul className="nav-list">
+          {mockedArray.slice(0, 5).map((item) => (
+            <ListItem key={item} id={item} value={item} />
           ))}
         </ul>
-      </header>
+      </nav>
       <main className="main">
-        <div>
-          <ul className="list">
-            {mockedArray.map((item) => (
-              <ListItem key={item + 100} id={item + 100} />
-            ))}
-          </ul>
-        </div>
+        <ul className="list-one">
+          {mockedArray.slice(0, 7).map((item) => (
+            <ListItem key={item + 5} id={item + 5} value={item + 5} />
+          ))}
+        </ul>
+        <ul className="list-two">
+          {mockedArray.map((item) => (
+            <ListItem key={item + 100} id={item + 100} value={item + 100} />
+          ))}
+        </ul>
       </main>
     </div>
   );

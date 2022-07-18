@@ -5,17 +5,21 @@ import { useFocusable } from '../../hooks/useFocusable';
 
 interface IListItem {
   id: string;
+  value: string;
 }
 
-export const ListItem: FC<IListItem> = ({ id }) => {
+export const ListItem: FC<IListItem> = ({ id, value }) => {
   const { ref, focused } = useFocusable(id);
 
   return (
     <li
+      data-testid="focusable-element"
       ref={ref}
       className={classNames('list__item', 'focusable-element', {
         'focusable-element_focused': focused,
       })}
-    />
+    >
+      {value}
+    </li>
   );
 };

@@ -1,13 +1,40 @@
-.header {
+.app {
+  max-width: 1024px;
+  margin: 0 auto;
   display: flex;
+  overflow: hidden;
+  padding: 20px;
 }
 
-.list {
+section {
+  padding: 20px;
+}
+
+.list-one {
+  padding: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: fit-content;
+  overflow-y: auto;
+}
+
+.list-two {
+  padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex-wrap: wrap;
-  width: 700px;
+}
+
+.nav-list {
+  padding: 10px;
+  margin-right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
 }
 
 .list__item {
@@ -24,6 +51,8 @@
 
 .main {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .focusable-element {
@@ -34,5 +63,5 @@
 
 .focusable-element_focused {
   border: 6px solid tomato;
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
