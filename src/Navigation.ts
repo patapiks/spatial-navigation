@@ -1,5 +1,6 @@
 interface IInit {
   initialId: string;
+  onEnter?: (el: IFocusableEl) => void;
 }
 interface INextFocusedCandidate {
   distance?: number;
@@ -24,6 +25,7 @@ class Navigation {
   private isInitialized: boolean;
   private focusableElements: { [id: string]: IFocusableEl };
   private focusedElement: IFocusableEl | null;
+  private onEnter: ((el: IFocusableEl) => void) | null;
 
   private calculateDistance(
     from: Pick<IFocusableEl, 'x' | 'y'>,
@@ -81,7 +83,8 @@ class Navigation {
           }, {});
           break;
         case 'Enter':
-          console.log(`Element with ID: ${currentEl.id} was clicked!`);
+          this.onEnter && this.onEnter(currentEl);
+          break;
       }
 
       if (nextFocusedCandidate?.id) {
@@ -96,13 +99,15 @@ class Navigation {
     this.focusableElements = {};
     this.focusedElement = null;
     this.isInitialized = false;
+    this.onEnter = null;
   }
 
-  init({ initialId }: IInit) {
+  init({ initialId, onEnter }: IInit) {
     if (!this.isInitialized) {
       this.isInitialized = true;
       this.focusedElement = this.focusableElements[initialId];
       this.focusedElement?.setFocused(true);
+      this.onEnter = onEnter ?? null;
 
       document.addEventListener('keydown', this.keydownListener);
     }
@@ -112,6 +117,7 @@ class Navigation {
     this.isInitialized = false;
     this.focusedElement?.setFocused(false);
     this.focusedElement = null;
+    this.onEnter = null;
 
     document.removeEventListener('keydown', this.keydownListener);
   }

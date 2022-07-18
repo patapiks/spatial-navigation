@@ -8,7 +8,10 @@ import './App.css';
 
 function App() {
   useEffect(() => {
-    Navigation.init({ initialId: '1' });
+    Navigation.init({
+      initialId: '1',
+      onEnter: (currentEl) => console.log(`Element with ID: ${currentEl.id} was clicked!`),
+    });
 
     return () => {
       Navigation.destroy();

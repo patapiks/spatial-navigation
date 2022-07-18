@@ -1,4 +1,5 @@
-import { fireEvent, prettyDOM, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+
 import App from './App';
 
 describe('TEST APP', () => {
@@ -6,7 +7,7 @@ describe('TEST APP', () => {
     render(<App />);
     const focusableElements = screen.getAllByTestId('focusable-element');
 
-    expect(focusableElements.length).toBe(20);
+    expect(focusableElements.length).toBe(25);
   });
 
   test('Checking the initial focus', () => {
@@ -23,8 +24,6 @@ describe('TEST APP', () => {
   test('Checking focus movement', () => {
     const { container } = render(<App />);
     fireEvent.keyDown(container, { key: 'ArrowDown' });
-
-    console.log(prettyDOM(container));
 
     const focusableElements = screen.getAllByTestId('focusable-element');
     const focusedElements = focusableElements.filter((el) =>
