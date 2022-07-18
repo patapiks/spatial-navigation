@@ -10,10 +10,11 @@
 - Библиотека позволяет разработчику отмечать элементы, которые являются фокусируемыми.
 
 ![example](./Peek%202022-07-18%2020-20.gif)
-## Get started
+### Get started
 
-### `npm install`
-### `npm start`
+`npm install`
+`npm start`
 
-## Тестирование
-### `npx cypress open`
+### Тестирование
+
+ `npx cypress open`
