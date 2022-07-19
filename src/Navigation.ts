@@ -117,6 +117,7 @@ class Navigation {
     this.isInitialized = false;
     this.focusedElement?.setFocused(false);
     this.focusedElement = null;
+    this.focusableElements = {};
     this.onEnter = null;
 
     document.removeEventListener('keydown', this.keydownListener);

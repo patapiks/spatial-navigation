@@ -13,7 +13,6 @@ export const ListItem: FC<IListItem> = ({ id, value }) => {
 
   return (
     <li
-      data-testid="focusable-element"
       ref={ref}
       className={classNames('list__item', 'focusable-element', {
         'focusable-element_focused': focused,
