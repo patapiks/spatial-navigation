@@ -11,6 +11,7 @@ interface IAddElement {
   id: string;
   node: Element;
   setFocused: (value: boolean) => void;
+  onEnter: () => void;
 }
 
 interface IFocusableEl {
@@ -19,6 +20,7 @@ interface IFocusableEl {
   setFocused: (value: boolean) => void;
   x: number;
   y: number;
+  onEnter: () => void;
 }
 
 class Navigation {
@@ -83,7 +85,7 @@ class Navigation {
           }, {});
           break;
         case 'Enter':
-          this.onEnter && this.onEnter(currentEl);
+          this.focusedElement?.onEnter();
           break;
       }
 
@@ -123,16 +125,23 @@ class Navigation {
     document.removeEventListener('keydown', this.keydownListener);
   }
 
-  addElement({ id, node, setFocused }: IAddElement) {
+  addElement({ id, node, setFocused, onEnter }: IAddElement) {
     const { x, y } = node.getBoundingClientRect();
 
-    this.focusableElements[id] = {
+    const element = {
       id,
       x,
       y,
       node,
       setFocused,
+      onEnter,
     };
+
+    if (this.focusedElement?.id === id) {
+      this.focusedElement = element;
+    }
+
+    this.focusableElements[id] = element;
   }
 
   removeElement(id: string) {

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import classNames from 'classnames';
 
 import { useFocusable } from '../../hooks/useFocusable';
@@ -9,7 +9,11 @@ interface IListItem {
 }
 
 export const ListItem: FC<IListItem> = ({ id, value }) => {
-  const { ref, focused } = useFocusable(id);
+  const onEnter = useCallback(() => {
+    console.log(`Element with ID: ${id} was clicked!`);
+  }, [id]);
+
+  const { ref, focused } = useFocusable(id, onEnter);
 
   return (
     <li
